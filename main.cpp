@@ -46,9 +46,11 @@ bool guardarInformacion(const std::string& nombre_archivo,
 }
 
 // Función auxiliar para leer un segmento de stringstream y convertirlo a int
+// Inside main.cpp, modify getIntFromSs for debugging
 int getIntFromSs(std::stringstream& ss, char delimiter) {
     std::string segment;
     std::getline(ss, segment, delimiter);
+    std::cout << "Attempting to convert: '" << segment << "'" << std::endl; // Debug print
     return std::stoi(segment);
 }
 
