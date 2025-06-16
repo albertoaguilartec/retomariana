@@ -177,34 +177,140 @@ int main() {
     const std::string nombre_archivo = "contenido_video.txt";
 
     // --- Guardar información inicial ---
+    /* Está comentado porque el archivo ya está generado, ahora se puede editar el archivo contenido_video.txt
     inicializarContenido(peliculas, series);
     std::cout << "--- Contenido Inicial ---" << std::endl;
     std::cout << "Peliculas generadas: " << peliculas.size() << std::endl;
     std::cout << "Series generadas: " << series.size() << std::endl;
     guardarInformacion(nombre_archivo, peliculas, series);
     std::cout << std::endl;
+    */
 
-    // --- Cargar información y mostrar ---
-    std::cout << "--- Cargando Contenido desde Archivo ---" << std::endl;
-    // Limpiar los vectores para asegurar que se carga desde cero
-    peliculas.clear();
-    series.clear();
 
-    if (cargarInformacion(nombre_archivo, peliculas, series)) {
-        std::cout << "\n--- Peliculas Cargadas ---" << std::endl;
-        for (const auto& peli : peliculas) {
-            peli.imprimir();
+    int opcion = 1;
+    while (opcion != 0) {
+        std::cout << "\n--- Menu Principal ---" << std::endl;
+        std::cout << "1. Cargar archivo de datos" << std::endl;
+        std::cout << "2. Mostrar los videos en general con una cierta calificacion o de un cierto genero" << std::endl;
+        std::cout << "3. Mostrar los episodios de una determinada serie con una calificacion determinada" << std::endl;
+        std::cout << "4. Mostrar las peliculas con cierta calificacion" << std::endl;
+        std::cout << "5. Calificar un video" << std::endl;
+        std::cout << "0. Salir" << std::endl;
+        std::cout <<"ingresa opcion:"<< std::endl;
+        std::cin >> opcion;
+
+        if (opcion == 1) {
+            /* INICIA CARGAR Y MOSTRAR INFORMACION */
+            std::cout << "--- Cargando Contenido desde Archivo ---" << std::endl;
+            // Limpiar los vectores para asegurar que se carga desde cero
+            peliculas.clear();
+            series.clear();
+
+            if (cargarInformacion(nombre_archivo, peliculas, series)) {
+                std::cout << "\n--- Peliculas Cargadas ---" << std::endl;
+                for (const auto& peli : peliculas) {
+                    peli.imprimir();
+                }
+                std::cout << std::endl;
+
+                std::cout << "--- Series Cargadas ---" << std::endl;
+                for (const auto& serie : series) {
+                    serie.imprimir();
+                    std::cout << std::endl;
+                }
+            } else {
+                std::cerr << "No se pudo cargar la informacion." << std::endl;
+            }
+            /* TERMINA CARGAR Y MOSTRAR INFORMACION */
         }
-        std::cout << std::endl;
+        if (opcion == 2) {
+            int filtro =0;
+            std::cout<<"quieres filtrar Calificación (1) o un género (2)?"<<std::endl;
+            std::cin >> filtro;
+            if (filtro == 1) {
+                int calificacion = 0;
+                std::cout<<"dame la calif entre 1-5: "<<std::endl;
+                std::cin >> calificacion;
+                // Limpiar los vectores para asegurar que se carga desde cero
+                peliculas.clear();
+                series.clear();
 
-        std::cout << "--- Series Cargadas ---" << std::endl;
-        for (const auto& serie : series) {
-            serie.imprimir();
-            std::cout << std::endl;
+                if (cargarInformacion(nombre_archivo, peliculas, series)) {
+                    std::cout << "\n--- Peliculas con calificacion ---"<< calificacion << std::endl;
+                    for (const auto& peli : peliculas) {
+                        if (peli.getCalifPromedio()==calificacion) {
+                            peli.imprimir();
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    std::cout << "--- Series con calificacion---" << calificacion<< std::endl;
+                    for (const auto& serie : series) {
+                        if (serie.getCalifPromedio()==calificacion) {
+                            serie.imprimir();
+                        }
+                        std::cout << std::endl;
+                    }
+                } else {
+                    std::cerr << "No se pudo cargar la informacion." << std::endl;
+                }
+
+            }
+            if (filtro == 2) {
+                std::string genero;
+                std::cout<<"dame el genero (Drama, Accion, CienciaFiccion) escribir tal cual: "<<std::endl;
+                std::cin >> genero;
+                peliculas.clear();
+                series.clear();
+
+                if (cargarInformacion(nombre_archivo, peliculas, series)) {
+                    std::cout << "\n--- Peliculas con genero ---"<< genero << std::endl;
+                    for (const auto& peli : peliculas) {
+                        if (peli.getGenero()==genero) {
+                            peli.imprimir();
+                        }
+                    }
+                    std::cout << std::endl;
+
+                    std::cout << "--- Series con genero---" << genero<< std::endl;
+                    for (const auto& serie : series) {
+                        if (serie.getGenero()==genero) {
+                            serie.imprimir();
+                        }
+                        std::cout << std::endl;
+                    }
+                } else {
+                    std::cerr << "No se pudo cargar la informacion." << std::endl;
+                }
+            }
+
         }
-    } else {
-        std::cerr << "No se pudo cargar la informacion." << std::endl;
+        if (opcion == 3) {
+            int calificacion = 0;
+            std::cout<<"Dame la cali de la serie 1-5: "<<std::endl;
+            std::cin >> calificacion;
+
+            peliculas.clear();
+            series.clear();
+
+            if (cargarInformacion(nombre_archivo, peliculas, series)) {
+
+                std::cout << "--- Series con calificacion---" << calificacion<< std::endl;
+                for (const auto& serie : series) {
+                    if (serie.getCalifPromedio()==calificacion) {
+                        serie.imprimir();
+                    }
+                    std::cout << std::endl;
+                }
+            } else {
+                std::cerr << "No se pudo cargar la informacion." << std::endl;
+            }
+        }
+
+
     }
+
+
 
     return 0;
 }
